@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Player Value Assessment</title>
+    <style>
+        body {
+            text-align: center;
+            font-family: Arial, sans-serif;
+            background-image: url("C:/Users/ryu/Desktop/player/logoyogo2.jpg"); /* 배경 이미지 파일 경로로 변경하세요 */
+            background-size: cover;
+            background-position: center 31%;
+            background-repeat: no-repeat;
+            margin: 0;
+            padding: 0;
+        }
+
+        .background-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.7); /* 배경 이미지 위에 흰색 반투명 레이어 */
+            z-index: 0;
+        }
+
+        .centered-form, .centered-inputs {
+            position: absolute;
+            left: 50%;
+            -ms-transform: translateX(-50%);
+            transform: translateX(-50%);
+            border: 1px solid black;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            z-index: 1;
+        }
+
+        .centered-form {
+            top: 5%;
+        }
+
+        .centered-inputs {
+            top: 35%;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        input,
+        select,
+        button {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 12px;
+            box-sizing: border-box;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            cursor: pointer;
+            border: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="background-overlay"></div>
+
+    <div class="centered-form">
+        <h1>Player Value Assessment</h1>
+        <form id="positionForm">
+            <label for="position">Choose a position:</label>
+            <select name="position" id="position" onchange="updateInputs()">
+                <option value="goalkeeper">Goalkeeper</option>
+                <option value="defender">Defender</option>
+                <option value="midfield">Midfield</option>
+                <option value="attack">Attack</option>
+            </select>
+            
+            
+        </form>
+    </div>
+
+    <div class="centered-inputs">
+        <h2>Enter Player Details</h2>
+        <form id="playerDetailsForm" action="/submit_player_details" method="post">
+            
+        </form>
+    </div>
+
+    <script>
+        // Initialize inputs on page load
+        updateInputs();
+
+        function updateInputs() {
+            var position = document.getElementById("position").value;
+            var playerDetailsForm = document.getElementById("playerDetailsForm");
+
+            // Remove existing dynamic inputs
+            while (playerDetailsForm.firstChild) {
+                playerDetailsForm.removeChild(playerDetailsForm.firstChild);
+            }
+
+            // Add dynamic inputs based on selected position
+            addInput("number", "height", "Height");
+            addInput("number", "age", "Age");
+            addInput("number", "appearance", "Appearance");
+            addInput("number", "minutes_played", "Minutes Played");
+            addInput("number", "highest_value", "Highest Value");
+
+            // Additional inputs based on position
+            switch (position) {
+                case "goalkeeper":
+                    addInput("number", "clean_sheets", "Clean Sheets");
+                    break;
+
+                case "midfield":
+                case "attack":
+                    addInput("number", "goals", "Goals");
+                    addInput("number", "assists", "Assists");
+                    break;
+
+                default:
+                    break;
+            }
+
+            // Add "Submit Details" button
+            var submitButton = document.createElement("button");
+            submitButton.type = "submit";
+            submitButton.innerText = "Submit Details";
+            playerDetailsForm.appendChild(submitButton);
+        }
+
+        function addInput(type, name, placeholder) {
+            var input = document.createElement("input");
+            input.type = type;
+            input.name = name;
+            input.placeholder = placeholder;
+            document.getElementById("playerDetailsForm").appendChild(input);
+            document.getElementById("playerDetailsForm").appendChild(document.createElement("br"));
+        }
+
+      
+        
+    </script>
+</body>
+</html>
